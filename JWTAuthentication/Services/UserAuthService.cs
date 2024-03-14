@@ -40,6 +40,7 @@ namespace JWTAuthentication.Services
         {
             var result = string.Empty;
 
+            // reading claim using IHttpContextAccessor
             if (_httpContextAccessor is not null) 
             {
                 //result = _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
