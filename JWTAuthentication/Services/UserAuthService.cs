@@ -1,5 +1,6 @@
 ﻿using JWTAuthentication.DTO;
 using JWTAuthentication.Model;
+using System.Security.Claims;
 
 namespace JWTAuthentication.Services
 {
@@ -7,10 +8,13 @@ namespace JWTAuthentication.Services
     {
         private readonly IPasswordService _passwordService;
         private readonly ITokenService _tokenService;
-        public UserAuthService(IPasswordService passwordService, ITokenService tokenService) 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserAuthService(IPasswordService passwordService, 
+            ITokenService tokenService, IHttpContextAccessor httpContextAccessor) 
         {
             _passwordService = passwordService;
             _tokenService = tokenService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<User> GetPasswordHash(UserDTO userDTO)
@@ -30,6 +34,20 @@ namespace JWTAuthentication.Services
         public string GetJWTToken(UserDTO userDTO) 
         {
             return _tokenService.GenerateJwtToken(userDTO);
+        }
+
+        public string GetUserDetails()
+        {
+            var result = string.Empty;
+
+            if (_httpContextAccessor is not null) 
+            {
+                //result = _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+                //result = _httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.Role);
+                result = _httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+            }
+
+            return result;
         }
     }
 }

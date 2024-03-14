@@ -1,6 +1,7 @@
 ﻿using JWTAuthentication.DTO;
 using JWTAuthentication.Model;
 using JWTAuthentication.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +17,18 @@ namespace JWTAuthentication.Controllers
             _userAuthService = userAuthService;
         }
 
-        [HttpGet(Name = "AuthCheck")]
-        public string CheckAuthController() 
+        //[HttpGet(Name = "AuthCheck")]
+        //public string CheckAuthController() 
+        //{
+        //    return "Auth controller working";
+        //}
+
+        [HttpGet, Authorize]
+        public IActionResult GetUserName() 
         {
-            return "Auth controller working";
+            var userDetail = _userAuthService.GetUserDetails();
+            
+            return Ok(userDetail);
         }
 
         [HttpPost("register", Name = "RegisterUser")]

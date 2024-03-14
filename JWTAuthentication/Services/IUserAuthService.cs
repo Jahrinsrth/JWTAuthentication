@@ -7,5 +7,6 @@ namespace JWTAuthentication.Services
     {
         Task<User> GetPasswordHash(UserDTO userDTO);
         string GetJWTToken(UserDTO userDTO);
+        string GetUserDetails();
     }
 }
