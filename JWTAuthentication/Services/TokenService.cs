@@ -1,9 +1,11 @@
 ﻿using JWTAuthentication.Common;
 using JWTAuthentication.DTO;
+using JWTAuthentication.Model;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace JWTAuthentication.Services
@@ -38,5 +40,18 @@ namespace JWTAuthentication.Services
 
             return jwt;
         }
+
+        private RefreshToken GenerateRefreshToken() 
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Expires = DateTime.UtcNow.AddDays(7),
+                Created = DateTime.UtcNow
+            };
+
+            return refreshToken;
+        }
+
     }
 }
